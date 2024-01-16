@@ -11,7 +11,8 @@ function CalculateInterest(e) {
 
     const brickCashMulti = e.target.elements.brickCashMulti.value || 1;
     const cashBrickMulti = e.target.elements.cashBrickMulti.value || 10;
-    const cashBrickChance = e.target.elements.cashBrickChance.value || 0.03;
+    const cashBrickChanceValue = e.target.elements.cashBrickChanceValue.value || 0.03;
+    const cashBrickChance = cashBrickChanceValue / 100;
     const stageBonusMulti = e.target.elements.stageBonusMulti.value || 1;
     const allCashMulti = e.target.elements.allCashMulti.value || 1;
 

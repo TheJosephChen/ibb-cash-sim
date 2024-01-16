@@ -50,7 +50,7 @@ function App() {
             <label>
               Total Cash Brick Chance:
               <input
-                id="cashBrickChance"
+                id="cashBrickChanceValue"
                 type="decimal" />
             </label>
           </div>
