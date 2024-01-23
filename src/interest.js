@@ -22,8 +22,8 @@ function CalculateInterest(e) {
     const interestLevel = e.target.elements.interestLevel.value;
     const bombLevel = e.target.elements.bombLevel.value;
 
-    const interestPercent = getInterestPercent(interestLevel)
-    const bombPercent = getBombPercent(bombLevel)
+    const interestPercent = getInterestPercent(interestLevel);
+    const bombPercent = getBombPercent(bombLevel);
     const levels = e.target.elements.levels.value;
 
     function doesWarp() {
@@ -31,11 +31,17 @@ function CalculateInterest(e) {
     }
 
     function getInterestPercent(interestCardLevel) {
+        if (interestCardLevel === '0') {
+            return 0;
+        }
         const interestCardValues = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035];
         return interestCardValues[interestCardLevel - 1];
     }
 
     function getBombPercent(bombCardLevel) {
+        if (bombCardLevel === '0') {
+            return 0;
+        }
         const bombCardValues = [0.1, 0.13, 0.16, 0.19, 0.22, 0.25];
         return bombCardValues[bombCardLevel - 1];
     }
