@@ -10,18 +10,20 @@ function App() {
   const [brickCash, setBrickCash] = useState();
   const [stageBonusCash, setStageBonusCash] = useState();
   const [interestCash, setInterestCash] = useState();
+  const [interestCap, setInterestCap] = useState("N/A");
 
   const handleSubmit = (e) => {
     
     e.preventDefault();
 
-    const [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest] = CalculateInterest(e);
+    const [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel] = CalculateInterest(e);
     setLevels(levels);
     setSkips(totalStagesSkipped);
     setWorldValue(totalCashOnHand);
     setBrickCash(totalCashFromBricks);
     setStageBonusCash(totalCashFromStageBonus);
     setInterestCash(totalCashFromInterest);
+    setInterestCap(interestCapLevel);
 
   }
 
@@ -110,14 +112,6 @@ function App() {
                 type="number" />
             </label>
           </div>
-          <div className="col">
-            <label>
-              Bomb Brick card level
-              <input
-                id="bombLevel"
-                type="number" />
-            </label>
-          </div>
         </div>
         <h2>Calculate</h2>
         <button type="submit">Do the thing</button>
@@ -128,6 +122,7 @@ function App() {
           <tr>
             <th>Levels Run</th>
             <th>Levels Skipped</th>
+            <th>Interest Cap Level*</th>
             <th>Final World Value</th>
             <th>Brick Cash Earned</th>
             <th>Stage Bonus Cash Earned</th>
@@ -138,6 +133,7 @@ function App() {
           <tr>
             <td>{levels}</td>
             <td>{skips}</td>
+            <td>{interestCap}</td>
             <td>{convertNumberLetter(worldValue)}</td>
             <td>{convertNumberLetter(brickCash)}</td>
             <td>{convertNumberLetter(stageBonusCash)}</td>
@@ -145,6 +141,7 @@ function App() {
           </tr>
         </tbody>
       </table>
+      * Interest Cap Level is the first level at which the interest you earn is based on your stage bonus instead of your total unspent cash.
     </div>
   );
 }

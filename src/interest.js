@@ -1,13 +1,12 @@
 import brickHealthAtLevel from "./numbers/BrickHealth";
 import getRandomStage from "./numbers/StageValues";
 
-const BOMB_HEALTH_MULTI = 0.5;
-
 function CalculateInterest(e) {
     let totalCashOnHand = 0;
     let totalCashFromBricks = 0;
     let totalCashFromStageBonus = 0;
     let totalCashFromInterest = 0;
+    let interestCapLevel = "N/A";
 
     const brickCashMulti = e.target.elements.brickCashMulti.value || 1;
     const cashBrickMulti = e.target.elements.cashBrickMulti.value || 10;
@@ -20,10 +19,8 @@ function CalculateInterest(e) {
     const blackHoleStages = parseInt(e.target.elements.blackHoleStages.value);
 
     const interestLevel = e.target.elements.interestLevel.value;
-    const bombLevel = e.target.elements.bombLevel.value;
 
     const interestPercent = getInterestPercent(interestLevel);
-    const bombPercent = getBombPercent(bombLevel);
     const levels = e.target.elements.levels.value;
 
     function doesWarp() {
@@ -36,14 +33,6 @@ function CalculateInterest(e) {
         }
         const interestCardValues = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035];
         return interestCardValues[interestCardLevel - 1];
-    }
-
-    function getBombPercent(bombCardLevel) {
-        if (bombCardLevel === '0') {
-            return 0;
-        }
-        const bombCardValues = [0.1, 0.13, 0.16, 0.19, 0.22, 0.25];
-        return bombCardValues[bombCardLevel - 1];
     }
 
     function calculateStagesToSkip() {
@@ -62,30 +51,24 @@ function CalculateInterest(e) {
         let stageBrickValue = 0;
         if (green > 0) {
             const cashGreenCount = Math.floor(green * cashBrickChance);
-            const bombGreenCount = Math.floor((green - cashGreenCount) * bombPercent);
-            const regularGreenCount = green - cashGreenCount - bombGreenCount;
+            const regularGreenCount = green - cashGreenCount;
             const regularGreenValue = health * brickCashMulti * allCashMulti;
             const cashGreenValue = regularGreenValue * cashBrickMulti;
-            const bombGreenValue = regularGreenValue * BOMB_HEALTH_MULTI;
-            stageBrickValue += (cashGreenCount * cashGreenValue) + (bombGreenCount * bombGreenValue) + (regularGreenCount * regularGreenValue);
+            stageBrickValue += (cashGreenCount * cashGreenValue) + (regularGreenCount * regularGreenValue);
         }
         if (blue > 0) {
             const cashBlueCount = Math.floor(blue * cashBrickChance);
-            const bombBlueCount = Math.floor((blue - cashBlueCount) * bombPercent);
-            const regularBlueCount = blue - cashBlueCount - bombBlueCount;
+            const regularBlueCount = blue - cashBlueCount;
             const regularBlueValue = 2 * health * brickCashMulti * allCashMulti;
             const cashBlueValue = regularBlueValue * cashBrickMulti;
-            const bombBlueValue = regularBlueValue * BOMB_HEALTH_MULTI;
-            stageBrickValue += (cashBlueCount * cashBlueValue) + (bombBlueCount * bombBlueValue) + (regularBlueCount * regularBlueValue);
+            stageBrickValue += (cashBlueCount * cashBlueValue) + (regularBlueCount * regularBlueValue);
         }
         if (red > 0) {
             const cashRedCount = Math.floor(red * cashBrickChance);
-            const bombRedCount = Math.floor((red - cashRedCount) * bombPercent);
-            const regularRedCount = red - cashRedCount - bombRedCount;
+            const regularRedCount = red - cashRedCount;
             const regularRedValue = 25 * health * brickCashMulti * allCashMulti;
             const cashRedValue = regularRedValue * cashBrickMulti;
-            const bombRedValue = regularRedValue * BOMB_HEALTH_MULTI;
-            stageBrickValue += (cashRedCount * cashRedValue) + (bombRedCount * bombRedValue) + (regularRedCount * regularRedValue);
+            stageBrickValue += (cashRedCount * cashRedValue) + (regularRedCount * regularRedValue);
         }
 
         return stageBrickValue;
@@ -93,6 +76,7 @@ function CalculateInterest(e) {
 
     let currentLevel = 1;
     let totalStagesSkipped = 0;
+    let interestCapReached = false;
     while (currentLevel <= levels) {
         const health = brickHealthAtLevel(currentLevel);
         const stage = getRandomStage();
@@ -109,6 +93,10 @@ function CalculateInterest(e) {
 
         // add stage interest
         const stageInterest = Math.min(totalCashOnHand * interestPercent, stageBonusValue * 100000);
+        if (!interestCapReached && totalCashOnHand * interestPercent > stageBonusValue * 100000) {
+            interestCapReached = true;
+            interestCapLevel = currentLevel;
+        }
 
         totalCashFromInterest += stageInterest;
         totalCashOnHand += stageInterest;
@@ -136,7 +124,7 @@ function CalculateInterest(e) {
         }
         currentLevel++;
     }
-    return [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest];
+    return [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel];
 
 
 }
