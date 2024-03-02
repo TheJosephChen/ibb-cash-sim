@@ -120,7 +120,7 @@ function App() {
       <table style={{ width: 500 }}>
         <thead>
           <tr>
-            <th>Levels Run</th>
+            <th>Levels Completed</th>
             <th>Levels Skipped</th>
             <th>Interest Cap Level*</th>
             <th>Final World Value</th>
