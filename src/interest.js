@@ -18,7 +18,7 @@ function CalculateInterest(e) {
     const stageSkipPercent = e.target.elements.stageSkipPercent.value;
     const blackHoleStages = parseInt(e.target.elements.blackHoleStages.value);
 
-    const interestLevel = e.target.elements.interestLevel.value;
+    const interestLevel = e.target.elements.interestLevel.value || '0';
 
     const interestPercent = getInterestPercent(interestLevel);
     const levels = e.target.elements.levels.value;
