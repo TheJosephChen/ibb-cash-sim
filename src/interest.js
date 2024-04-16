@@ -1,6 +1,8 @@
 import brickHealthAtLevel from "./numbers/BrickHealth";
 import getRandomStage from "./numbers/StageValues";
 
+const BOMB_HEALTH_MULTI = 0.5;
+
 function CalculateInterest(e) {
     let totalCashOnHand = 0;
     let totalCashFromBricks = 0;
@@ -19,8 +21,10 @@ function CalculateInterest(e) {
     const blackHoleStages = parseInt(e.target.elements.blackHoleStages.value);
 
     const interestLevel = e.target.elements.interestLevel.value || '0';
+    const bombLevel = e.target.elements.bombLevel.value || '0';
 
     const interestPercent = getInterestPercent(interestLevel);
+    const bombPercent = getBombPercent(bombLevel);
     const levels = e.target.elements.levels.value;
 
     function doesWarp() {
@@ -33,6 +37,14 @@ function CalculateInterest(e) {
         }
         const interestCardValues = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035];
         return interestCardValues[interestCardLevel - 1];
+    }
+
+    function getBombPercent(bombCardLevel) {
+        if (bombCardLevel === '0') {
+            return 0;
+        }
+        const bombCardValues = [0.1, 0.13, 0.16, 0.19, 0.22, 0.25];
+        return bombCardValues[bombCardLevel - 1];
     }
 
     function calculateStagesToSkip() {
@@ -50,25 +62,31 @@ function CalculateInterest(e) {
         const {green, blue, red} = stage || {};
         let stageBrickValue = 0;
         if (green > 0) {
-            const cashGreenCount = Math.floor(green * cashBrickChance);
-            const regularGreenCount = green - cashGreenCount;
+            const bombGreenCount = Math.floor(green * bombPercent);
+            const cashGreenCount = Math.floor((green - bombGreenCount) * cashBrickChance);
+            const regularGreenCount = green - bombGreenCount - cashGreenCount;
             const regularGreenValue = health * brickCashMulti * allCashMulti;
+            const bombGreenValue = regularGreenValue * BOMB_HEALTH_MULTI;
             const cashGreenValue = regularGreenValue * cashBrickMulti;
-            stageBrickValue += (cashGreenCount * cashGreenValue) + (regularGreenCount * regularGreenValue);
+            stageBrickValue += (bombGreenCount * bombGreenValue) + (cashGreenCount * cashGreenValue) + (regularGreenCount * regularGreenValue);
         }
         if (blue > 0) {
-            const cashBlueCount = Math.floor(blue * cashBrickChance);
-            const regularBlueCount = blue - cashBlueCount;
+            const bombBlueCount = Math.floor(blue * bombPercent);
+            const cashBlueCount = Math.floor((blue - bombBlueCount) * cashBrickChance);
+            const regularBlueCount = blue - bombBlueCount - cashBlueCount;
             const regularBlueValue = 2 * health * brickCashMulti * allCashMulti;
+            const bombBlueValue = regularBlueValue * BOMB_HEALTH_MULTI;
             const cashBlueValue = regularBlueValue * cashBrickMulti;
-            stageBrickValue += (cashBlueCount * cashBlueValue) + (regularBlueCount * regularBlueValue);
+            stageBrickValue += (bombBlueCount * bombBlueValue) + (cashBlueCount * cashBlueValue) + (regularBlueCount * regularBlueValue);
         }
         if (red > 0) {
-            const cashRedCount = Math.floor(red * cashBrickChance);
-            const regularRedCount = red - cashRedCount;
+            const bombRedCount = Math.floor(red * bombPercent);
+            const cashRedCount = Math.floor((red - bombRedCount) * cashBrickChance);
+            const regularRedCount = red - bombRedCount - cashRedCount;
             const regularRedValue = 25 * health * brickCashMulti * allCashMulti;
+            const bombRedValue = regularRedValue * BOMB_HEALTH_MULTI;
             const cashRedValue = regularRedValue * cashBrickMulti;
-            stageBrickValue += (cashRedCount * cashRedValue) + (regularRedCount * regularRedValue);
+            stageBrickValue += (bombRedCount * bombRedValue) + (cashRedCount * cashRedValue) + (regularRedCount * regularRedValue);
         }
 
         return stageBrickValue;

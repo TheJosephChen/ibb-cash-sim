@@ -112,6 +112,14 @@ function App() {
                 type="number" />
             </label>
           </div>
+          <div className="col">
+            <label>
+              Bomb Brick card level
+              <input
+                id="bombLevel"
+                type="number" />
+            </label>
+          </div>
         </div>
         <h2>Calculate</h2>
         <button type="submit">Do the thing</button>
