@@ -35,7 +35,7 @@ function App() {
           <div className="form-row">
             <div className="col">
               <label>
-                Total Brick Cash Bonus:
+                Total Brick Cash Bonus (calculated from cards, badges, and masteries):
                 <input
                   id="brickCashMulti"
                   type="decimal" />
@@ -43,7 +43,7 @@ function App() {
             </div>
             <div className="col">
               <label>
-                Total Cash Brick Bonus:
+                Total Cash Brick Bonus (from stats page):
                 <input
                   id="cashBrickMulti"
                   type="decimal" />
@@ -51,7 +51,7 @@ function App() {
             </div>
             <div className="col">
               <label>
-                Total Cash Brick Chance:
+                Total Cash Brick Chance (from stats page):
                 <input
                   id="cashBrickChanceValue"
                   type="decimal" />
@@ -59,7 +59,7 @@ function App() {
             </div>
             <div className="col">
               <label>
-                Total Stage Complete Bonus:
+                Total Stage Complete Bonus (from stats page):
                 <input
                   id="stageBonusMulti"
                   type="decimal" />

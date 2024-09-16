@@ -76,7 +76,7 @@ function CalculateInterest(e) {
             const cashGreenCount = Math.floor((green - bombGreenCount) * cashBrickChance);
             const regularGreenCount = green - bombGreenCount - cashGreenCount;
             const regularGreenValue = health * brickCashMulti * allCashMulti;
-            const bombGreenValue = regularGreenValue * BOMB_HEALTH_MULTI;
+            const bombGreenValue = regularGreenValue;
             const cashGreenValue = regularGreenValue * cashBrickMulti;
             stageBrickValue += (bombGreenCount * bombGreenValue) + (cashGreenCount * cashGreenValue) + (regularGreenCount * regularGreenValue);
         }
@@ -85,7 +85,7 @@ function CalculateInterest(e) {
             const cashBlueCount = Math.floor((blue - bombBlueCount) * cashBrickChance);
             const regularBlueCount = blue - bombBlueCount - cashBlueCount;
             const regularBlueValue = 2 * health * brickCashMulti * allCashMulti;
-            const bombBlueValue = regularBlueValue * BOMB_HEALTH_MULTI;
+            const bombBlueValue = regularBlueValue;
             const cashBlueValue = regularBlueValue * cashBrickMulti;
             stageBrickValue += (bombBlueCount * bombBlueValue) + (cashBlueCount * cashBlueValue) + (regularBlueCount * regularBlueValue);
         }
@@ -94,7 +94,7 @@ function CalculateInterest(e) {
             const cashRedCount = Math.floor((red - bombRedCount) * cashBrickChance);
             const regularRedCount = red - bombRedCount - cashRedCount;
             const regularRedValue = 25 * health * brickCashMulti * allCashMulti;
-            const bombRedValue = regularRedValue * BOMB_HEALTH_MULTI;
+            const bombRedValue = regularRedValue;
             const cashRedValue = regularRedValue * cashBrickMulti;
             stageBrickValue += (bombRedCount * bombRedValue) + (cashRedCount * cashRedValue) + (regularRedCount * regularRedValue);
         }
@@ -109,7 +109,7 @@ function CalculateInterest(e) {
         const health = brickHealthAtLevel(currentLevel);
         const stage = getRandomStage();
         const stageBrickValue = calculateStageBrickValue(stage, health);
-        const stageBonusValue = stageBrickValue * stageBonusMulti * 0.7;
+        const stageBonusValue = stageBrickValue * stageBonusMulti * 0.7 / allCashMulti;
 
         // add stage bonus
         totalCashFromStageBonus += stageBonusValue;
