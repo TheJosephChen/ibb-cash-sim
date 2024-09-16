@@ -22,20 +22,22 @@ function CalculateInterest(e) {
 
     const interestLevel = e.target.elements.interestLevel.value || '0';
     const bombLevel = e.target.elements.bombLevel.value || '0';
+    const stageSkipLevel = e.target.elements.stageSkipLevel.value || '0';
 
     const interestPercent = getInterestPercent(interestLevel);
     const bombPercent = getBombPercent(bombLevel);
+    const stageSkipBonus = getStageSkipBonus(stageSkipLevel);
     const levels = e.target.elements.levels.value;
 
     function doesWarp() {
-        return Math.floor(Math.random()*100) === 0;
+        return Math.floor(Math.random() * 100) === 0;
     }
 
     function getInterestPercent(interestCardLevel) {
         if (interestCardLevel === '0') {
             return 0;
         }
-        const interestCardValues = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035];
+        const interestCardValues = [0.001, 0.0015, 0.002, 0.0025, 0.003, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035, 0.0035];
         return interestCardValues[interestCardLevel - 1];
     }
 
@@ -43,13 +45,21 @@ function CalculateInterest(e) {
         if (bombCardLevel === '0') {
             return 0;
         }
-        const bombCardValues = [0.1, 0.13, 0.16, 0.19, 0.22, 0.25];
+        const bombCardValues = [0.1, 0.13, 0.16, 0.19, 0.22, 0.25, 0.28, 0.31, 0.34, 0.37, 0.4, 0.43];
         return bombCardValues[bombCardLevel - 1];
+    }
+
+    function getStageSkipBonus(stageSkipLevel) {
+        if (stageSkipLevel === '0') {
+            return 0;
+        }
+        const stageSkipMasteryValues = [1.25, 1.5, 1.75, 2, 2.25, 2.5];
+        return stageSkipMasteryValues[stageSkipLevel - 1];
     }
 
     function calculateStagesToSkip() {
         let stagesToSkip = 0;
-        const randomInt = Math.floor(Math.random()*100);
+        const randomInt = Math.floor(Math.random() * 100);
         if (randomInt <= stageSkipPercent - 1) {
             stagesToSkip++;
             return stagesToSkip + calculateStagesToSkip();
@@ -59,7 +69,7 @@ function CalculateInterest(e) {
     }
 
     function calculateStageBrickValue(stage, health) {
-        const {green, blue, red} = stage || {};
+        const { green, blue, red } = stage || {};
         let stageBrickValue = 0;
         if (green > 0) {
             const bombGreenCount = Math.floor(green * bombPercent);
@@ -133,10 +143,11 @@ function CalculateInterest(e) {
 
         // check for stage skips
         // on stage skip, multiply the current stage bonus by the number of skips
+        // if the stage skip card has masteries, include that bonus
         const skips = parseInt(calculateStagesToSkip());
         if (skips > 0) {
             totalStagesSkipped += skips;
-            totalCashFromStageBonus += stageBonusValue * skips;
+            totalCashFromStageBonus += stageBonusValue * skips * stageSkipBonus;
             totalCashOnHand += stageBonusValue * skips;
             currentLevel += skips;
         }

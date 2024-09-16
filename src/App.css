@@ -1,3 +1,17 @@
-table, th, td {
-    border: 1px solid black;
-  }
+.calc-container {
+  padding-left: 8px;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+input {
+  margin-left: 4px;
+}
+
+button {
+  margin-bottom: 8px;
+}
