@@ -20,8 +20,8 @@ function App() {
 
     e.preventDefault();
 
-    const [levels, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel] = CalculateInterest(e);
-    setLevels(levels);
+    const [levelsRun, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel] = CalculateInterest(e);
+    setLevels(levelsRun);
     setSkips(totalStagesSkipped);
     setCardBadgeSkips(totalLevelsSkipped);
     setLevelsWarped(totalLevelsWarped);

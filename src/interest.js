@@ -2,6 +2,7 @@ import brickHealthAtLevel from "./numbers/BrickHealth";
 import getRandomStage from "./numbers/StageValues";
 
 function CalculateInterest(e) {
+    let levelsRun = 0;
     let totalCashOnHand = 0;
     let totalCashFromBricks = 0;
     let totalCashFromStageBonus = 0;
@@ -27,7 +28,7 @@ function CalculateInterest(e) {
     const interestPercent = getInterestPercent(interestLevel);
     const bombPercent = getBombPercent(bombLevel);
     const stageSkipBonus = getStageSkipBonus(stageSkipLevel);
-    const levels = e.target.elements.levels.value;
+    const levels = parseInt(e.target.elements.levels.value);
 
     function doesWarp() {
         return Math.floor(Math.random() * 100) === 0;
@@ -111,13 +112,13 @@ function CalculateInterest(e) {
         const stageBrickValue = calculateStageBrickValue(stage, health);
         const stageBonusValue = stageBrickValue * stageBonusMulti * 0.7 / allCashMulti;
 
-        // add stage bonus
-        totalCashFromStageBonus += stageBonusValue;
-        totalCashOnHand += stageBonusValue;
-
         // add stage brick cash
         totalCashFromBricks += stageBrickValue;
         totalCashOnHand += stageBrickValue;
+
+        // add stage bonus
+        totalCashFromStageBonus += stageBonusValue;
+        totalCashOnHand += stageBonusValue;
 
         // add stage interest
         const stageInterest = Math.min(totalCashOnHand * interestPercent, stageBonusValue * 100000);
@@ -134,11 +135,11 @@ function CalculateInterest(e) {
         // on warp, multiply the current stage bonus by the black hole warp distance
         if (blackHoleStages > 0) {
             if (doesWarp()) {
-                currentLevel += blackHoleStages;
-                totalLevelsWarped += blackHoleStages;
-                totalStagesSkipped += blackHoleStages - 1;
-                totalCashFromStageBonus += stageBonusValue * blackHoleStages * stageSkipBonus;
-                totalCashOnHand += stageBonusValue * blackHoleStages;
+                currentLevel += blackHoleStages - 1;
+                totalLevelsWarped += blackHoleStages - 1;
+                let cashFromWarp = stageBonusValue * blackHoleStages * stageSkipBonus;
+                totalCashFromStageBonus += cashFromWarp;
+                totalCashOnHand += cashFromWarp;
                 continue;
             }
         }
@@ -148,15 +149,22 @@ function CalculateInterest(e) {
         // if the stage skip card has masteries, include that bonus
         const skips = parseInt(calculateStagesToSkip());
         if (skips > 0) {
-            totalStagesSkipped += skips;
             totalLevelsSkipped += skips;
-            totalCashFromStageBonus += stageBonusValue * skips * stageSkipBonus;
-            totalCashOnHand += stageBonusValue * skips;
+            let cashFromSkip = stageBonusValue * skips * stageSkipBonus
+            totalCashFromStageBonus += cashFromSkip;
+            totalCashOnHand += cashFromSkip;
             currentLevel += skips;
         }
         currentLevel++;
     }
-    return [levels, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel];
+
+    // format numbers to comma-separated format
+    levelsRun = levels.toLocaleString();
+    totalStagesSkipped = (totalLevelsSkipped + totalLevelsWarped).toLocaleString();
+    totalLevelsSkipped = totalLevelsSkipped.toLocaleString();
+    totalLevelsWarped = totalLevelsWarped.toLocaleString();
+    interestCapLevel = interestCapLevel.toLocaleString();
+    return [levelsRun, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel];
 
 
 }
