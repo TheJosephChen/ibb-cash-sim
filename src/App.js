@@ -6,19 +6,25 @@ import convertNumberLetter from "./numbers/NumberConversions";
 function App() {
   const [levels, setLevels] = useState();
   const [skips, setSkips] = useState();
+  const [cardBadgeSkips, setCardBadgeSkips] = useState();
+  const [levelsWarped, setLevelsWarped] = useState();
   const [worldValue, setWorldValue] = useState();
   const [brickCash, setBrickCash] = useState();
   const [stageBonusCash, setStageBonusCash] = useState();
   const [interestCash, setInterestCash] = useState();
   const [interestCap, setInterestCap] = useState("N/A");
+  const pink = "#ff9dbc"
+  const yellow = "#fff889"
 
   const handleSubmit = (e) => {
 
     e.preventDefault();
 
-    const [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel] = CalculateInterest(e);
+    const [levels, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel] = CalculateInterest(e);
     setLevels(levels);
     setSkips(totalStagesSkipped);
+    setCardBadgeSkips(totalLevelsSkipped);
+    setLevelsWarped(totalLevelsWarped);
     setWorldValue(totalCashOnHand);
     setBrickCash(totalCashFromBricks);
     setStageBonusCash(totalCashFromStageBonus);
@@ -139,23 +145,27 @@ function App() {
           <thead>
             <tr>
               <th>Levels Completed</th>
-              <th>Levels Skipped</th>
+              <th style={{background: pink}}>Total Levels Skipped</th>
+              <th style={{background: pink}}>Card/Badge Skips</th>
+              <th style={{background: pink}}>Levels Warped</th>
               <th>Interest Cap Level*</th>
-              <th>Final World Value</th>
-              <th>Brick Cash Earned</th>
-              <th>Stage Bonus Cash Earned</th>
-              <th>Interest Earned</th>
+              <th style={{background: yellow}}>Final World Value</th>
+              <th style={{background: yellow}}>Brick Cash Earned</th>
+              <th style={{background: yellow}}>Stage Bonus Cash Earned</th>
+              <th style={{background: yellow}}>Interest Earned</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{levels}</td>
-              <td>{skips}</td>
+              <td style={{background: pink}}>{skips}</td>
+              <td style={{background: pink}}>{cardBadgeSkips}</td>
+              <td style={{background: pink}}>{levelsWarped}</td>
               <td>{interestCap}</td>
-              <td>{convertNumberLetter(worldValue)}</td>
-              <td>{convertNumberLetter(brickCash)}</td>
-              <td>{convertNumberLetter(stageBonusCash)}</td>
-              <td>{convertNumberLetter(interestCash)}</td>
+              <td style={{background: yellow}}>{convertNumberLetter(worldValue)}</td>
+              <td style={{background: yellow}}>{convertNumberLetter(brickCash)}</td>
+              <td style={{background: yellow}}>{convertNumberLetter(stageBonusCash)}</td>
+              <td style={{background: yellow}}>{convertNumberLetter(interestCash)}</td>
             </tr>
           </tbody>
         </table>

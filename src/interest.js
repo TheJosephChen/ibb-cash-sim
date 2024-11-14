@@ -1,13 +1,13 @@
 import brickHealthAtLevel from "./numbers/BrickHealth";
 import getRandomStage from "./numbers/StageValues";
 
-const BOMB_HEALTH_MULTI = 0.5;
-
 function CalculateInterest(e) {
     let totalCashOnHand = 0;
     let totalCashFromBricks = 0;
     let totalCashFromStageBonus = 0;
     let totalCashFromInterest = 0;
+    let totalLevelsSkipped = 0;
+    let totalLevelsWarped = 0;
     let interestCapLevel = "N/A";
 
     const brickCashMulti = e.target.elements.brickCashMulti.value || 1;
@@ -135,7 +135,9 @@ function CalculateInterest(e) {
         if (blackHoleStages > 0) {
             if (doesWarp()) {
                 currentLevel += blackHoleStages;
+                totalLevelsWarped += blackHoleStages;
                 totalStagesSkipped += blackHoleStages - 1;
+                totalCashFromStageBonus += stageBonusValue * blackHoleStages * stageSkipBonus;
                 totalCashOnHand += stageBonusValue * blackHoleStages;
                 continue;
             }
@@ -147,13 +149,14 @@ function CalculateInterest(e) {
         const skips = parseInt(calculateStagesToSkip());
         if (skips > 0) {
             totalStagesSkipped += skips;
+            totalLevelsSkipped += skips;
             totalCashFromStageBonus += stageBonusValue * skips * stageSkipBonus;
             totalCashOnHand += stageBonusValue * skips;
             currentLevel += skips;
         }
         currentLevel++;
     }
-    return [levels, totalStagesSkipped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel];
+    return [levels, totalStagesSkipped, totalLevelsSkipped, totalLevelsWarped, totalCashOnHand, totalCashFromBricks, totalCashFromStageBonus, totalCashFromInterest, interestCapLevel];
 
 
 }
