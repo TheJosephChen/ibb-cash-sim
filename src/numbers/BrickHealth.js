@@ -1,4 +1,5 @@
 const HEALTH_EXPONENT = 1.32;
+const GROWTH_EXPONENT = 1.4;
 
 const cumulativeHealthMultipliers = {
     75: 1.2,
@@ -44,7 +45,13 @@ function getCumulativeHealthMulti(level) {
 
 function brickHealthAtLevel(level) {
     const totalMulti = getCumulativeHealthMulti(level);
-    return totalMulti * (level ** HEALTH_EXPONENT)
+    var growthMulti = 1;
+    // post 200k, cumulative multi of x1.4 is applied per 100k levels
+    if (level >= 300000) {
+        const growthLevels = (level - 200000) / 100000;
+        growthMulti = Math.pow(1.4, growthLevels);
+    }
+    return totalMulti * (level ** HEALTH_EXPONENT) * growthMulti;
 }
 
 export default brickHealthAtLevel;
